@@ -1,0 +1,14 @@
+version: '3'
+
+services:
+  web:
+    build: .
+    ports:
+      - "8000:8000"
+    volumes:
+      - .:/app
+    command: >
+      bash -c "python attendance_system/manage.py makemigrations api &&
+               python attendance_system/manage.py migrate &&
+               python attendance_system/manage.py shell -c \"from django.contrib.auth.models import User; User.objects.filter(username='admin').exists() or User.objects.create_superuser('admin', 'admin@example.com', 'admin')\" &&
+               python attendance_system/manage.py runserver 0.0.0.0:8000" 
